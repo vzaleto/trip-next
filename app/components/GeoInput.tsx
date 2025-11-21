@@ -39,7 +39,6 @@ export default function GeoInput({value = null, placeholder = "Where", onChange,
         setLoading(true);
         try {
             const arr = await fetchGeoSearch(q)
-
             if (lastRequestedQuery.current === q) {
                 setItems(arr);
             }
@@ -83,7 +82,9 @@ export default function GeoInput({value = null, placeholder = "Where", onChange,
     const handleSelect = (item: GeoItem) => {
         setQuery(item.name);
         onChange?.(item);
+        onInputChange?.(item.name);
         setOpen(false);
+        inputRef.current?.focus();
     }
 
     const handleInputClick = async () => {
@@ -92,11 +93,15 @@ export default function GeoInput({value = null, placeholder = "Where", onChange,
             inputRef.current?.focus();
         }
     }
+    const closeList = () => {
+        console.log("closeList")
+        setOpen(false);
+    }
 
     return (
-        <ListChoice rootRef={rootRef} inputRef={inputRef} open={open} query={query} items={items} loading={loading}
+        <ListChoice rootRef={rootRef} setOpen={setOpen} inputRef={inputRef} open={open} query={query} items={items} loading={loading}
                     handleSelect={handleSelect} placeholder={placeholder} handleInputFocus={handleInputFocus}
-                    handleInputClick={handleInputClick} handleInputChange={handleInputChange}/>
+                    handleInputClick={handleInputClick} handleInputChange={handleInputChange} handleCLose={closeList}/>
     )
 };
 

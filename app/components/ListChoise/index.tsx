@@ -1,7 +1,6 @@
 import {ListChoiceProps} from "@/types";
-import {useState} from "react";
 
-export default function ListChoice( {inputRef, open, setOpen, loading, query, items, handleInputFocus, handleInputClick, handleInputChange, rootRef, placeholder, handleSelect}: ListChoiceProps) {
+export default function ListChoice( {inputRef, open, handleCLose, loading, query, items, handleInputFocus, handleInputClick, handleInputChange, rootRef, placeholder, handleSelect}: ListChoiceProps) {
 
     return (
         <div ref={rootRef} className="relative" style={{position: "relative", width: "100%"}}>
@@ -15,7 +14,17 @@ export default function ListChoice( {inputRef, open, setOpen, loading, query, it
                 onClick={handleInputClick}
                 className="w-full p-2 border border-gray-300 rounded-md"
                 onKeyDown={(e) => {
-                    if (e.key === "escape") setOpen(false)
+                    if (e.key === "Escape") {
+                        handleCLose?.();
+                        return;
+                    }
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                        if (items.length > 0) {
+                            handleSelect(items[0]); // ← выбираем первый вариант
+                            inputRef.current?.focus();
+                        }
+                    }
                 }}
                 style={{
                     width: "100%",

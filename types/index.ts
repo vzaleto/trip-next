@@ -12,8 +12,8 @@ export interface GeoInputProps {
     onInputChange?: (text: string) => void
 }
 export interface ListChoiceProps {
-    rootRef: React.RefObject<HTMLDivElement>,
-    inputRef: React.RefObject<HTMLInputElement> ,
+    rootRef: React.RefObject<HTMLDivElement | null>,
+    inputRef: React.RefObject<HTMLInputElement | null >  ,
     open: boolean,
     setOpen: (v: boolean) => void,
     loading: boolean,
@@ -23,5 +23,6 @@ export interface ListChoiceProps {
     handleInputClick: () => void,
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
     placeholder: string,
-    handleSelect: (item: GeoItem) => void
+    handleSelect: (item: GeoItem) => void,
+    handleCLose: () => void
 }
