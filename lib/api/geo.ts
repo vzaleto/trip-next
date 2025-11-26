@@ -1,5 +1,6 @@
 
 import {GeoItem} from "@/types";
+import {Hotel} from "@/app/components/TourGrid";
 
 export const fetchCountries = async () => {
     const response: [] = await fetchJson('api/countries')
@@ -11,6 +12,12 @@ export const fetchGeoSearch = async (q: string) => {
     console.log("fetchGeoSearch", data)
     return Object.values(data).map((elem: any) => ({...elem, id: elem.id ?? elem.id})) as GeoItem[];
 }
+export const fetchHotels = async (countryId: string) => {
+    const url = `/api/hotels/${countryId}`;
+  return fetchJson(url);
+    // console.log("fetchHotels", data)
+}
+
 export async function fetchJson(url: string, options?: RequestInit) {
     const response = await fetch(url, {...options});
     const text = await response.text();

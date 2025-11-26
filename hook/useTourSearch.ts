@@ -15,7 +15,7 @@ interface SearchResponse {
 }
 export function useTourSearch() {
     const [loading, setLoading] = useState(false);
-    const [results, setResults] = useState<Record<string, PriceResult> | null>(null);
+    const [results, setResults] = useState<Record<string, PriceResult[]> | null>(null);
     const [error, setError] = useState<string | null>(null);
     const activeToken = useRef<string | null>(null);
     const isCanceled = useRef(false);
