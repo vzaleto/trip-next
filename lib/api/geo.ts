@@ -1,10 +1,11 @@
-
 import {GeoItem} from "@/types";
-import {Hotel} from "@/app/components/TourGrid";
 
 export const fetchCountries = async () => {
     const response: [] = await fetchJson('api/countries')
-    return Object.values(response).map((elem:{id: string, name: string, flag: string}) => ({...elem, type: "country" as const}));
+    return Object.values(response).map((elem: { id: string, name: string, flag: string }) => ({
+        ...elem,
+        type: "country" as const
+    }));
 }
 export const fetchGeoSearch = async (q: string) => {
     const url = `/api/search-geo?q=${encodeURIComponent(q)}`;
@@ -14,8 +15,20 @@ export const fetchGeoSearch = async (q: string) => {
 }
 export const fetchHotels = async (countryId: string) => {
     const url = `/api/hotels/${countryId}`;
-  return fetchJson(url);
-    // console.log("fetchHotels", data)
+    return fetchJson(url);
+}
+export const fetchHotelSingle = async (hotelId: string) => {
+    const url = `/api/hotel/${hotelId}`;
+    const data = await fetchJson(url);
+    console.log("fetchHotel", data)
+    return data
+}
+
+export const fetchPrices = async (priceId: string) => {
+    const url = `/api/price/${priceId}`;
+    const data = await fetchJson(url);
+    console.log("fetchPrices", data)
+    return data
 }
 
 export async function fetchJson(url: string, options?: RequestInit) {
@@ -34,8 +47,8 @@ export async function fetchJson(url: string, options?: RequestInit) {
         console.log(e)
         if (!response.ok) {
             const err = new Error(response.statusText);
-            err.status = response.status;
-            throw err;
+             err.status = response.status;
+             throw err;
         }
         return null
     }

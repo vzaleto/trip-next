@@ -1,21 +1,6 @@
 import {TourCard} from "@/app/components/TourCard";
 import styles from "./TourGrid.module.css";
-
-export interface PriceItem{
-    id: string;
-    amount: number;
-    currency: string;
-    startDate: string;
-    endDate: string;
-    hotelID: string;
-}
-export interface Hotel{
-    id: string;
-    name: string;
-    img?: string;
-    cityName: string;
-    countryName: string;
-}
+import {Hotel, PriceItem} from "@/types";
 
 
 export function TourGrid({items, hotels}: { items: PriceItem[], hotels: Record<string, Hotel> | null | undefined }) {

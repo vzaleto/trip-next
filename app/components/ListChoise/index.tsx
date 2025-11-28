@@ -1,86 +1,65 @@
 import {ListChoiceProps} from "@/types";
+import styles from "./ListChoice.module.css";
+import {Globe} from "lucide-react";
+import {Building2} from "lucide-react";
+import {Hotel} from "lucide-react";
 
-export default function ListChoice( {inputRef, open, handleCLose, loading, query, items, handleInputFocus, handleInputClick, handleInputChange, rootRef, placeholder, handleSelect}: ListChoiceProps) {
+export default function ListChoice({
+                                       inputRef,
+                                       open,
+                                       handleCLose,
+                                       loading,
+                                       query,
+                                       items,
+                                       handleInputFocus,
+                                       handleInputClick,
+                                       handleInputChange,
+                                       rootRef,
+                                       placeholder,
+                                       handleSelect
+                                   }: ListChoiceProps) {
 
     return (
-        <div ref={rootRef} className="relative" style={{position: "relative", width: "100%"}}>
-            <input
-                ref={inputRef}
-                type="text"
-                value={query}
-                placeholder={placeholder}
-                onFocus={handleInputFocus}
-                onChange={handleInputChange}
-                onClick={handleInputClick}
-                className="w-full p-2 border border-gray-300 rounded-md"
-                onKeyDown={(e) => {
-                    if (e.key === "Escape") {
-                        handleCLose?.();
-                        return;
-                    }
-                    if (e.key === "Enter") {
-                        e.preventDefault();
-                        if (items.length > 0) {
-                            handleSelect(items[0]); // ← выбираем первый вариант
-                            inputRef.current?.focus();
-                        }
-                    }
-                }}
-                style={{
-                    width: "100%",
-                    padding: "10px 12px",
-                    borderRadius: 6,
-                    border: "1px solid #ccc",
-                }}
-            />
+
+        <div ref={rootRef} className={styles.wrapper}>
+            <input ref={inputRef} className={styles.input} type="text" value={query} placeholder={placeholder}
+                   onFocus={handleInputFocus} onChange={handleInputChange} onClick={handleInputClick}
+                   onKeyDown={(e) => {
+                       if (e.key === "Escape") {
+                           handleCLose?.();
+                           return;
+                       }
+                       if (e.key === "Enter") {
+                           e.preventDefault();
+                           if (items.length > 0) {
+                               handleSelect(items[0]); // ← выбираем первый вариант
+                               inputRef.current?.focus();
+                           }
+                       }
+                   }}/>
             {open && (
-                <div role="listbox"
-                     style={{
-                         position: "absolute",
-                         top: "calc(100% + 6px)",
-                         left: 0,
-                         right: 0,
-                         background: "#fff",
-                         border: "1px solid #ddd",
-                         borderRadius: 8,
-                         boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
-                         zIndex: 50,
-                         maxHeight: 320,
-                         overflow: "auto",
-                     }}>
-                    {loading ? (
-                        <div style={{padding: 12}}>Loading...</div>
-                    ) : items.length === 0 ? (
-                        <div style={{padding: 12}}>No results</div>
-                    ) : (
-                        items.map((elem) => (
-                            <div
-                                key={String(elem.id)}
-                                role="option"
-                                onClick={() => handleSelect(elem)}
-                                style={{
-                                    display: "flex",
-                                    gap: 10,
-                                    alignItems: "center",
-                                    padding: "10px 12px",
-                                    cursor: "pointer",
-                                    borderBottom: "1px solid #f3f3f3",
-                                }}>
-                                 <span style={{width: 28, textAlign: "center"}}>
-                  {elem.type === "country" ? (elem.flag ?
-                      <img src={elem.flag} alt="" style={{width: 22, height: 14}}/> : "🌍") : ""}
-                                     {elem.type === "city" ? "🏙️" : ""}
-                                     {elem.type === "hotel" ? "🏨" : ""}
-                </span>
-                                <div style={{display: "flex", flexDirection: "column"}}>
-                                    <div style={{fontWeight: 600}}>{elem.name}</div>
-                                    <div style={{fontSize: 12, color: "#666"}}>{elem.type}</div>
-                                </div>
+                <div role="listbox" className={styles.dropdown}>
+                    {loading && <div className={styles.loading}>Loading...</div>}
+                    {!loading && items.length === 0 && <div className={styles.noResults}>No results</div>}
+                    {items.map((elem) => (
+                        <div key={elem.id} role="option" aria-selected={false}
+                             onClick={() => handleSelect(elem)}
+                             className={styles.dropdownItem}>
+          <span className={styles.flagIcon}>
+            {elem.type === "country" ? <Globe size={18}/> : ""}
+              {elem.type === "city" ? <Building2 size={18}/> : ""}
+              {elem.type === "hotel" ? <Hotel size={18}/> : ""}
+          </span>
+                            <div className={styles.itemContent}>
+                                <div className={styles.itemName}>{elem.name}</div>
+                                <div className={styles.itemType}>{elem.type}</div>
                             </div>
-                        ))
-                    )}
+                        </div>
+                    ))}
                 </div>
             )}
         </div>
+
+
     )
 }

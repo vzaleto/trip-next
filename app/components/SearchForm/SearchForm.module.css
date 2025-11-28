@@ -1,0 +1,13 @@
+.form {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+.buttonFinder{
+    padding: 10px 16px;
+    border-radius: 6px;
+    background: #0b69ff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}

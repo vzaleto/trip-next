@@ -2,21 +2,7 @@
 
 import Link from "next/link";
 import styles from "./TourCard.module.css";
-
-interface TourCardProps {
-    priceId: string;
-    amount: number;
-    currency: string;
-    startDate: string;
-    endDate: string;
-    hotel: {
-        id: string;
-        name: string;
-        img?: string;
-        cityName: string;
-        countryName: string;
-    } | null
-}
+import {TourCardProps} from "@/types";
 
 function formatDate(iso: string) {
     const d = new Date(iso);
@@ -31,8 +17,9 @@ function formatPrice(amount: number, currency: string) {
     return `${parts} ${currency.toUpperCase()}`;
 }
 
+
 export function TourCard({ priceId, amount, currency, startDate, endDate, hotel }: TourCardProps) {
-    console.log("TourCard", hotel)
+    console.log("TourCard hotel", hotel)
     return (
         <div className={styles.card} >
             <div className={styles.media}>
@@ -61,7 +48,7 @@ export function TourCard({ priceId, amount, currency, startDate, endDate, hotel 
                 </div>
                 <div className={styles.manys}>
                     <div className={styles.price} > {formatPrice(amount, currency)} </div>
-                    <Link href={`/tour/${priceId}?hotelId=${hotel?.id ?? ""}`}>
+                    <Link href={`/tour/${priceId}?hotelID=${hotel?.id ?? ""}`}>
                         Open price
                     </Link>
                 </div>

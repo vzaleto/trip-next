@@ -1,12 +1,12 @@
 import {NextResponse} from "next/server";
-import {getHotels} from "../../../../lib/mock/api";
+import {getPrice} from "../../../../lib/mock/api";
 
 export async function GET(req, {params}) {
-    const {countryId} = params;
-    дуе
+    const {priceId} = await params;
     try {
-        const resp = await getHotels(countryId);
+        const resp = await getPrice(priceId);
         const data = await resp.json();
+        console.log(data)
         return NextResponse.json(data)
     } catch (e) {
         console.log(e)

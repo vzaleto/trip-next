@@ -3,9 +3,10 @@ import {getHotel} from "../../../../lib/mock/api";
 
 export async function GET(req, {params}) {
 
-    const {hotelId} = params;
+    const {hotelId} = await params;
+
     try{
-        const response = await getHotel(hotelId);
+        const response = await getHotel(+hotelId);
         const data = await response.json();
         return NextResponse.json(data)
     }catch (e){

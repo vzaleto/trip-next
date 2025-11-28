@@ -1,3 +1,4 @@
+
 export interface GeoItem {
     id: string | number,
     name: string,
@@ -25,4 +26,46 @@ export interface ListChoiceProps {
     placeholder: string,
     handleSelect: (item: GeoItem) => void,
     handleCLose: () => void
+}
+export interface PriceItem{
+    id: string;
+    amount: number;
+    currency: string;
+    startDate: string;
+    endDate: string;
+    hotelID: string;
+}
+export interface Hotel{
+    id: string;
+    name: string;
+    img?: string;
+    cityName: string;
+    countryName: string;
+    description?: string;
+    services: {
+        wifi:string;
+        aquapark: string;
+        tennis_court: string;
+        laundry: string;
+        parking:string;
+    }
+}
+export interface TourDetailsProps {
+    price: PriceItem;
+    hotel: Hotel
+}
+export interface TourCardProps {
+    priceId: string;
+    amount: number;
+    currency: string;
+    startDate: string;
+    endDate: string;
+    hotel: {
+        id: string;
+        name: string;
+        img?: string;
+        cityName: string;
+        countryName: string;
+        description?: string
+    } | null
 }
