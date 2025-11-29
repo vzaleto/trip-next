@@ -16,7 +16,7 @@ export default function Index({onSubmit}: { onSubmit?: (payload: { geo: GeoItem,
     const {get} = useHotelsCache();
     const [selected, setSelected] = useState<GeoItem | null>(null);
     const [inputText, setInputText] = useState<string>("");
-    const [countryId, setCountryId] = useState<string | null>(null);
+    // const [countryId, setCountryId] = useState<string | null>(null);
     const [hotels, setHotels] = useState<Record<string, Hotel> | null>(null);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -24,13 +24,27 @@ export default function Index({onSubmit}: { onSubmit?: (payload: { geo: GeoItem,
 
         if (!selected) return
         onSubmit?.({geo: selected, input: inputText});
-        console.log("submit", selected, inputText)
 
-        if (!countryId) return
-        await search(countryId);
-        const hotels = await get(countryId);
+        let idToSearch: string | null = null;
+
+        switch (selected.type) {
+            case "country":
+                idToSearch = String(selected.id);
+                break;
+            case "city":
+            case "hotel":
+                idToSearch = String(selected.countryId);
+                break;
+        }
+
+        if (!idToSearch) return;
+
+        await search(idToSearch);
+
+        const hotelsMap = await get(idToSearch);
+
         console.log("hotels handleSubmit", hotels)
-        setHotels(hotels ?? null);
+        setHotels(hotelsMap ?? null);
 
     }
     return (
@@ -43,30 +57,28 @@ export default function Index({onSubmit}: { onSubmit?: (payload: { geo: GeoItem,
                                   console.log("elem onchange", elem)
                                   setSelected(elem);
                                   setInputText(elem?.name ?? "");
-                                  if (elem?.type === "country") {
-                                      setCountryId(elem.id)
-                                  } else {
-                                      setCountryId(null)
-                                  }
                               }}
                               onInputChange={(text) => {
                                   setInputText(text);
                                   if (!text) {
                                       setSelected(null)
-                                      setCountryId(null)
+
                                   }
-                              }}/>
+                              }}
+                                  onEnter={() => {
+                                      const fakeEvent = { preventDefault: () => {} } as any;
+                                      handleSubmit(fakeEvent);
+
+                              }}
+                    />
                 </div>
                 <button disabled={loading} type="submit" className={styles.buttonFinder}>Find
                 </button>
             </form>
             {loading && <div>Loading...</div>}
             {error && <div>{error}</div>}
-            {results && results ? (
-                <TourGrid
-                    items ={ results ? Object.values(results) : []  }
-                    hotels={hotels}
-                />
+            {results ? (
+                <TourGrid items={Object.values(results)} hotels={hotels}/>
             ) : (
                 !loading && <div>No results</div>
             )}

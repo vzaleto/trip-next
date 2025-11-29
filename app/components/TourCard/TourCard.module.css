@@ -88,3 +88,6 @@
     border-radius: 6px;
     font-size: 13px;
 }
+.link:hover {
+    background:#084acc;
+}

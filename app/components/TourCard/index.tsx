@@ -48,7 +48,7 @@ export function TourCard({ priceId, amount, currency, startDate, endDate, hotel 
                 </div>
                 <div className={styles.manys}>
                     <div className={styles.price} > {formatPrice(amount, currency)} </div>
-                    <Link href={`/tour/${priceId}?hotelID=${hotel?.id ?? ""}`}>
+                    <Link href={`/tour/${priceId}?hotelID=${hotel?.id ?? ""}`} className={styles.link}>
                         Open price
                     </Link>
                 </div>

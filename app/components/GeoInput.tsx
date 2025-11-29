@@ -8,15 +8,15 @@ import {useClickOutside} from "@/hook/useClickOutside";
 import {delaySearch} from "@/hook/useDelaySearch";
 
 
-export default function GeoInput({value = null, placeholder = "Where", onChange, onInputChange}: GeoInputProps) {
+export default function GeoInput({value = null, placeholder = "Where", onChange, onInputChange,onEnter}: GeoInputProps) {
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState<string>(value?.name ?? '');
     const [items, setItems] = useState<GeoItem[]>([]);
     const [loading, setLoading] = useState(false);
+
     const rootRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const lastRequestedQuery = useRef<string>("");
-
 
     const loadCountries = async () => {
         setLoading(true);
@@ -30,6 +30,7 @@ export default function GeoInput({value = null, placeholder = "Where", onChange,
             setLoading(false);
         }
     }
+
     const loadSearch = async (q: string) => {
         if (!q || q.trim().length === 0) {
             await loadCountries();
@@ -59,14 +60,15 @@ export default function GeoInput({value = null, placeholder = "Where", onChange,
 
         if (!query) {
             await loadCountries();
-        } else {
-
-            if (value && value.type === "country") {
-                await loadCountries();
-            } else {
-                debouncedSearch(query);
-            }
         }
+        else {
+            await loadSearch(query);
+        }
+            // if (value?.type === "country") {
+            //     await loadCountries();
+            // } else {
+            //     await loadSearch(query);
+            // }
     }
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,21 +78,28 @@ export default function GeoInput({value = null, placeholder = "Where", onChange,
         onInputChange?.(v);
         setOpen(true);
         debouncedSearch(v);
-        // if (value) onChange?.(null);
+
     }
 
-    const handleSelect = (item: GeoItem) => {
+    const handleSelect = async (item: GeoItem) => {
         setQuery(item.name);
         onChange?.(item);
         onInputChange?.(item.name);
-        setOpen(false);
+
+        if(item.type === "country"){
+           await loadCountries();
+        }else{
+           await loadSearch(item.name);
+        }
+
+        setOpen(true);
         inputRef.current?.focus();
     }
 
     const handleInputClick = async () => {
         if (!open) {
             await handleInputFocus();
-            inputRef.current?.focus();
+            // inputRef.current?.focus();
         }
     }
     const closeList = () => {
@@ -101,7 +110,7 @@ export default function GeoInput({value = null, placeholder = "Where", onChange,
     return (
         <ListChoice rootRef={rootRef} setOpen={setOpen} inputRef={inputRef} open={open} query={query} items={items} loading={loading}
                     handleSelect={handleSelect} placeholder={placeholder} handleInputFocus={handleInputFocus}
-                    handleInputClick={handleInputClick} handleInputChange={handleInputChange} handleCLose={closeList}/>
+                    handleInputClick={handleInputClick} handleInputChange={handleInputChange} handleCLose={closeList} onEnter={onEnter}/>
     )
 };
 

@@ -3,14 +3,17 @@ export interface GeoItem {
     id: string | number,
     name: string,
     type?: "country" | "city" | "hotel",
-    flag?: string
+    flag?: string,
+    countryId?: string | number
+
 }
 
 export interface GeoInputProps {
     value?: GeoItem | null,
     placeholder?: string,
     onChange?: (item: GeoItem | null) => void,
-    onInputChange?: (text: string) => void
+    onInputChange?: (text: string) => void,
+    onEnter?: () => void | undefined
 }
 export interface ListChoiceProps {
     rootRef: React.RefObject<HTMLDivElement | null>,
@@ -26,6 +29,7 @@ export interface ListChoiceProps {
     placeholder: string,
     handleSelect: (item: GeoItem) => void,
     handleCLose: () => void
+    onEnter?: () => void | undefined
 }
 export interface PriceItem{
     id: string;

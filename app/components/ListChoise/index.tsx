@@ -7,6 +7,7 @@ import {Hotel} from "lucide-react";
 export default function ListChoice({
                                        inputRef,
                                        open,
+    setOpen,
                                        handleCLose,
                                        loading,
                                        query,
@@ -16,7 +17,8 @@ export default function ListChoice({
                                        handleInputChange,
                                        rootRef,
                                        placeholder,
-                                       handleSelect
+                                       handleSelect,
+                                       onEnter
                                    }: ListChoiceProps) {
 
     return (
@@ -31,10 +33,11 @@ export default function ListChoice({
                        }
                        if (e.key === "Enter") {
                            e.preventDefault();
-                           if (items.length > 0) {
-                               handleSelect(items[0]); // ← выбираем первый вариант
-                               inputRef.current?.focus();
+                           if (open) {
+                               setOpen(false);
                            }
+                           onEnter?.();
+                           inputRef.current?.blur();
                        }
                    }}/>
             {open && (
